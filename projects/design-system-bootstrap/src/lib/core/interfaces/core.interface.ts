@@ -20,6 +20,9 @@ export type BadgeTypeText = 'text-white' | 'text-dark';
 /** Tipo de tema para botones */
 export type ButtonType = Themes;
 
+/** Tipo de input soportado por el Design System */
+export type InputType = 'text' | 'password' | 'email' | 'number';
+
 /**
  * Configuración de un botón dentro de un grupo de botones.
  */

@@ -9,3 +9,19 @@
     <dsb-nav-link-molecule [navLinks]="navLinks">
     </dsb-nav-link-molecule>
 </dsb-container-atom>
+
+<dsb-container-atom title="Form Field" >
+    <div class="row">
+        <div class="col-md-6">
+            @for(field of formFields; track field.idField){
+                <dsb-form-field-molecule
+                    [label]="field.label"
+                    [idField]="field.idField"
+                    [type]="field.type"
+                    [required]="field.required"
+                    (valueChange)="onFormFieldChange(field.idField, $event)">
+                </dsb-form-field-molecule>
+            }
+        </div>
+    </div>
+</dsb-container-atom>

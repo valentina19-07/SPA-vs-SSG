@@ -3,6 +3,8 @@ import {
   ButtonGroupData, 
   ButtonGroupMolecule, 
   ContainerAtom, 
+  FormFieldMolecule,
+  InputType,
   NavLink, 
   NavLinkMolecule 
 } from '@brejcha13320/design-system-bootstrap';
@@ -13,6 +15,7 @@ import {
     ContainerAtom,
     ButtonGroupMolecule,
     NavLinkMolecule,
+    FormFieldMolecule,
   ],
 })
 export class Molecules {
@@ -33,7 +36,20 @@ export class Molecules {
     { text: 'Link 3', url: '/organisms' },
   ];
 
+  formFields: { label: string; idField: string; type: InputType; required: boolean }[] = [
+    { label: 'Nombre Completo', idField: 'field-fullname', type: 'text', required: true },
+    { label: 'Correo Institucional', idField: 'field-email', type: 'email', required: true },
+    { label: 'Contraseña de Acceso', idField: 'field-password', type: 'password', required: true },
+    { label: 'Teléfono de Contacto', idField: 'field-phone', type: 'text', required: false },
+  ];
+
+  lastValues: { [key: string]: string } = {};
+
   onClick(idButton: string){
     alert(`Click en el Boton de Grupo ${idButton}`);
+  }
+
+  onFormFieldChange(idField: string, value: string) {
+    this.lastValues[idField] = value;
   }
 }

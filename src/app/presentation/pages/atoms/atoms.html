@@ -26,3 +26,31 @@
         }
     </section>
 </dsb-container-atom>
+
+<dsb-container-atom title="Label" >
+    <section class="d-flex flex-column gap-2" >
+        @for(label of labels; track label.idFor){
+            <dsb-label-atom [text]="label.text" [idFor]="label.idFor" [required]="label.required"></dsb-label-atom>
+        }
+    </section>
+</dsb-container-atom>
+
+<dsb-container-atom title="Input" >
+    <section class="d-flex flex-column gap-3" >
+        @for(input of inputs; track input.idInput){
+            <div class="row align-items-center">
+                <div class="col-sm-2">
+                    <span class="badge bg-secondary">{{ input.type }}</span>
+                </div>
+                <div class="col-sm-10">
+                    <dsb-input-atom 
+                        [idInput]="input.idInput" 
+                        [type]="input.type" 
+                        [placeholder]="input.placeholder"
+                        (valueChange)="onInputChange(input.idInput, $event)">
+                    </dsb-input-atom>
+                </div>
+            </div>
+        }
+    </section>
+</dsb-container-atom>

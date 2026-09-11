@@ -1,1 +1,4 @@
-<p>form-field.molecule works!</p>
+<div class="mb-3">
+  <dsb-label-atom [text]="label" [idFor]="idField" [required]="required"></dsb-label-atom>
+  <dsb-input-atom [idInput]="idField" [type]="type" (valueChange)="valueChange.emit($event)"></dsb-input-atom>
+</div>

@@ -1,0 +1,111 @@
+<dsb-container-atom title="Módulo de Productos (SPA)">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="text-muted mb-0">Catálogo de productos cargados desde la API / Faker.js</p>
+    <dsb-button-atom
+      type="primary"
+      idButton="btn-refrescar-productos"
+      (clicker)="cargarProductos()">
+      Refrescar Datos
+    </dsb-button-atom>
+  </div>
+
+  @if (cargando) {
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+      <dsb-icon-atom icon="arrow-repeat" [size]="2"></dsb-icon-atom>
+      <span class="ms-2">Cargando productos desde el servidor...</span>
+    </div>
+  }
+
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Agregar Nuevo Producto</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <dsb-form-field-molecule
+                label="Nombre del Producto"
+                idField="prod-nombre"
+                type="text"
+                [required]="true"
+                (valueChange)="onFieldChange('nombre', $event)">
+              </dsb-form-field-molecule>
+            </div>
+            <div class="col-md-3">
+              <dsb-form-field-molecule
+                label="Precio"
+                idField="prod-precio"
+                type="number"
+                [required]="true"
+                (valueChange)="onFieldChange('precio', $event)">
+              </dsb-form-field-molecule>
+            </div>
+            <div class="col-md-3">
+              <dsb-form-field-molecule
+                label="Categoría"
+                idField="prod-categoria"
+                type="text"
+                [required]="false"
+                (valueChange)="onFieldChange('categoria', $event)">
+              </dsb-form-field-molecule>
+            </div>
+            <div class="col-md-3">
+              <dsb-form-field-molecule
+                label="Descripción"
+                idField="prod-descripcion"
+                type="text"
+                [required]="false"
+                (valueChange)="onFieldChange('descripcion', $event)">
+              </dsb-form-field-molecule>
+            </div>
+          </div>
+          <div class="mt-3 text-end">
+            <dsb-button-atom
+              type="success"
+              idButton="btn-guardar-producto"
+              (clicker)="crearProducto()">
+              Crear Producto
+            </dsb-button-atom>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover table-striped align-middle border">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (prod of productos; track prod.id) {
+          <tr>
+            <td><code>{{ prod.id }}</code></td>
+            <td class="fw-bold">{{ prod.nombre }}</td>
+            <td>
+              <dsb-badge-atom type="info" typeText="text-dark">
+                {{ prod.categoria }}
+              </dsb-badge-atom>
+            </td>
+            <td class="text-success fw-bold">${{ prod.precio }}</td>
+            <td class="text-muted small">{{ prod.descripcion }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="text-center py-4 text-muted">
+              No hay productos registrados.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</dsb-container-atom>

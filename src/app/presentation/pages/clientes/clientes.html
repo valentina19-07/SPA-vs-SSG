@@ -1,0 +1,104 @@
+<dsb-container-atom title="Módulo de Clientes (SPA)">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="text-muted mb-0">Directorio de clientes registrados y generados dinámicamente</p>
+    <dsb-button-atom
+      type="primary"
+      idButton="btn-refrescar-clientes"
+      (clicker)="cargarClientes()">
+      Refrescar Datos
+    </dsb-button-atom>
+  </div>
+
+  @if (cargando) {
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+      <dsb-icon-atom icon="arrow-repeat" [size]="2"></dsb-icon-atom>
+      <span class="ms-2">Cargando clientes desde el servidor...</span>
+    </div>
+  }
+
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Registrar Nuevo Cliente</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <dsb-form-field-molecule
+                label="Nombre Completo"
+                idField="cli-nombre"
+                type="text"
+                [required]="true"
+                (valueChange)="onFieldChange('nombre', $event)">
+              </dsb-form-field-molecule>
+            </div>
+            <div class="col-md-4">
+              <dsb-form-field-molecule
+                label="Correo Electrónico"
+                idField="cli-email"
+                type="email"
+                [required]="true"
+                (valueChange)="onFieldChange('email', $event)">
+              </dsb-form-field-molecule>
+            </div>
+            <div class="col-md-4">
+              <dsb-form-field-molecule
+                label="Ciudad"
+                idField="cli-ciudad"
+                type="text"
+                [required]="false"
+                (valueChange)="onFieldChange('ciudad', $event)">
+              </dsb-form-field-molecule>
+            </div>
+          </div>
+          <div class="mt-3 text-end">
+            <dsb-button-atom
+              type="success"
+              idButton="btn-guardar-cliente"
+              (clicker)="crearCliente()">
+              Guardar Cliente
+            </dsb-button-atom>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover table-striped align-middle border">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Correo Electrónico</th>
+          <th>Ciudad</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cli of clientes; track cli.id) {
+          <tr>
+            <td><code>{{ cli.id }}</code></td>
+            <td class="fw-bold">{{ cli.nombre }}</td>
+            <td>
+              <a [href]="'mailto:' + cli.email" class="text-decoration-none">
+                {{ cli.email }}
+              </a>
+            </td>
+            <td>
+              <dsb-badge-atom type="secondary" typeText="text-white">
+                {{ cli.ciudad }}
+              </dsb-badge-atom>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="text-center py-4 text-muted">
+              No hay clientes registrados.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</dsb-container-atom>

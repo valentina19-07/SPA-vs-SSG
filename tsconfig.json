@@ -5,7 +5,8 @@
   "compilerOptions": {
     "paths": {
       "@brejcha13320/design-system-bootstrap": [
-        "./dist/design-system-bootstrap"
+        "./dist/design-system-bootstrap",
+        "./projects/design-system-bootstrap/src/public-api.ts"
       ]
     },
     "strict": true,

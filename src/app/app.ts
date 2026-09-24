@@ -22,6 +22,9 @@ export class App {
       { text: 'Átomos', url: '/atoms' },
       { text: 'Moléculas', url: '/molecules' },
       { text: 'Organismos', url: '/organisms' },
+      { text: 'Productos', url: '/productos' },
+      { text: 'Clientes', url: '/clientes' },
+      { text: 'Pedidos', url: '/pedidos' },
     ]
   }
 }

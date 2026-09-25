@@ -1,8 +1,8 @@
-﻿{
+{
   "name": "astro-app",
   "type": "module",
   "version": "1.0.0",
-  "description": "Aplicación SSG con Astro para comparativa de rendimiento frente a Angular SPA",
+  "description": "AplicaciÃ³n SSG con Astro para comparativa de rendimiento frente a Angular SPA",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

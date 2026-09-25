@@ -1,0 +1,197 @@
+﻿---
+import Layout from '../layouts/Layout.astro';
+
+// Listado de pedidos iniciales (SSG)
+const initialPedidos = [
+  {
+    id: 'ord-101',
+    producto: 'Balón Oficial Spalding',
+    cantidad: 2,
+    fecha: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+  },
+  {
+    id: 'ord-102',
+    producto: 'Zapatillas Air Zoom',
+    cantidad: 1,
+    fecha: new Date(Date.now() - 86400000).toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+  },
+  {
+    id: 'ord-103',
+    producto: 'Uniforme Completo Tuluá Basket',
+    cantidad: 5,
+    fecha: new Date(Date.now() - 172800000).toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+  },
+  {
+    id: 'ord-104',
+    producto: 'Conos de Entrenamiento (Pack x10)',
+    cantidad: 3,
+    fecha: new Date(Date.now() - 259200000).toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+  }
+];
+---
+
+<Layout title="Módulo de Pedidos (SSG)" activePage="pedidos">
+  <div class="dsb-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h2 class="h3 fw-bold text-dark mb-0">Módulo de Pedidos (SSG)</h2>
+        <p class="text-muted mb-0">Listado de órdenes y órdenes de compra con renderizado estático</p>
+      </div>
+      <button
+        type="button"
+        id="btn-refrescar-pedidos"
+        class="btn btn-primary d-flex align-items-center"
+      >
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Refrescar Datos
+      </button>
+    </div>
+
+    <div id="alert-cargando-ped" class="alert alert-info d-none align-items-center" role="alert">
+      <div class="spinner-border spinner-border-sm me-2 text-info" role="status"></div>
+      <span>Cargando pedidos actualizados desde el backend...</span>
+    </div>
+
+    <!-- Formulario de Registro de Pedido -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0 fs-6 fw-bold">Registrar Nuevo Pedido</h5>
+          </div>
+          <div class="card-body">
+            <form id="form-pedido">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="ped-producto" class="form-label small fw-semibold">Producto Solicitado <span class="text-danger">*</span></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="ped-producto"
+                    placeholder="Ej. Balón Profesional"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="ped-cantidad" class="form-label small fw-semibold">Cantidad <span class="text-danger">*</span></label>
+                  <input
+                    type="number"
+                    min="1"
+                    class="form-control"
+                    id="ped-cantidad"
+                    value="1"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mt-3 text-end">
+                <button
+                  type="submit"
+                  id="btn-guardar-pedido"
+                  class="btn btn-warning text-dark fw-semibold"
+                >
+                  <i class="bi bi-check2-circle me-1"></i>
+                  Guardar Pedido
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Pedidos -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle border">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 20%;">ID</th>
+            <th style="width: 35%;">Producto</th>
+            <th style="width: 20%;">Cantidad</th>
+            <th style="width: 25%;">Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-pedidos-body">
+          {initialPedidos.map((ped) => (
+            <tr>
+              <td><code>{ped.id}</code></td>
+              <td class="fw-bold">{ped.producto}</td>
+              <td>
+                <span class="badge bg-primary text-white">
+                  {ped.cantidad} un.
+                </span>
+              </td>
+              <td class="text-secondary small">{ped.fecha}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const formPed = document.getElementById('form-pedido') as HTMLFormElement;
+    const tbodyPed = document.getElementById('tabla-pedidos-body') as HTMLElement;
+    const btnRefrescarPed = document.getElementById('btn-refrescar-pedidos') as HTMLButtonElement;
+    const alertCargandoPed = document.getElementById('alert-cargando-ped') as HTMLElement;
+
+    function agregarFilaPedido(ped: any) {
+      const tr = document.createElement('tr');
+      const fechaTxt = ped.fecha || new Date().toLocaleString('es-CO');
+      tr.innerHTML = `
+        <td><code>${ped.id}</code></td>
+        <td class="fw-bold">${ped.producto}</td>
+        <td><span class="badge bg-primary text-white">${ped.cantidad} un.</span></td>
+        <td class="text-secondary small">${fechaTxt}</td>
+      `;
+      tbodyPed.prepend(tr);
+    }
+
+    formPed?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const prodInput = document.getElementById('ped-producto') as HTMLInputElement;
+      const cantInput = document.getElementById('ped-cantidad') as HTMLInputElement;
+
+      const nuevoPedido = {
+        id: 'ord-' + Date.now().toString().slice(-4),
+        producto: prodInput.value,
+        cantidad: parseInt(cantInput.value, 10) || 1,
+        fecha: new Date().toLocaleString('es-CO'),
+      };
+
+      try {
+        await fetch('http://localhost:3000/api/pedidos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(nuevoPedido),
+        });
+      } catch (err) {
+        console.log('Backend offline, guardado local (SSG)');
+      }
+
+      agregarFilaPedido(nuevoPedido);
+      formPed.reset();
+      (document.getElementById('ped-cantidad') as HTMLInputElement).value = '1';
+    });
+
+    btnRefrescarPed?.addEventListener('click', async () => {
+      alertCargandoPed.classList.remove('d-none');
+      alertCargandoPed.classList.add('d-flex');
+      try {
+        const res = await fetch('http://localhost:3000/api/pedidos');
+        if (res.ok) {
+          const data = await res.json();
+          tbodyPed.innerHTML = '';
+          data.forEach((p: any) => agregarFilaPedido(p));
+        }
+      } catch (err) {
+        console.log('Error al conectar con backend');
+      } finally {
+        setTimeout(() => {
+          alertCargandoPed.classList.remove('d-flex');
+          alertCargandoPed.classList.add('d-none');
+        }, 400);
+      }
+    });
+  </script>
+</Layout>
